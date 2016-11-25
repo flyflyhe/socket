@@ -108,7 +108,7 @@
                 // alert(FileExt);
                 //alert(file.size);
                 ws.send("filename="+file.name+"&filesize="+file.size);
-                /*while(endSize < file.size) {
+                while(endSize < file.size) {
                  startSize = endSize;
                  if (file.size - startSize < paragraph) {
                  //防止文件或者分片剩余部分小于分片大小
@@ -146,7 +146,7 @@
                  startSize = endSize = 0;
                  i = 0;
                  console.log("发送" + file.name +"完毕");
-                 file = fileList[j++];*/
+                 file = fileList[j++];
                 console.log("发送文件名完毕");
             });
         });
