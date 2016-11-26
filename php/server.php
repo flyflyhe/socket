@@ -81,30 +81,33 @@ class Sock{
                         //走到这里就是该client发送信息了，对接受到的信息进行decode解码处理
                         //
                         $buffer = $this->decode($buffer);
+                        var_dump($buffer);
                         if($buffer==false){
                             continue;
                         }
-                        if ('send_type' == substr($buffer,0,9)){//表示发送的内容是字符串
-                            $this->send($k,$buffer);
-                            continue;
-                        }
-                        if (false !== strpos($buffer, 'filename=')) {
-                            $len_content = 0;
-                            parse_str($buffer,$msg);
-                            //$filename = $this->saveFile(substr($buffer, 9));
-                            $filename = $msg['filename'];
-                            $fileNewPath = $this->saveFile($msg['filename']);
-                            $fileNewName = basename($fileNewPath);
-                            $filesize = $msg['filesize'];
-                            $this->response($k,array('data' => 'ok', 'filename' =>$filename, 'fileNewName' => "$fileNewName"));
-                        } else if (!empty($fileNewName)) {
-                            $this->saveFileContent($fileNewPath, $buffer);
-                            $len_content += strlen($buffer);
-                            if($len_content >= $filesize){
-                                $fileNewName = "";
-                            }
-                            $this->response($k, array('data' => 'ok', 'percent' =>floor($len_content/$filesize*100), 'recv'=> $len_content,'fileName' => $filename));
-                        }
+                        $this->sendStr($k, $buffer);
+                        
+                        // if ('send_type' == substr($buffer,0,9)){//表示发送的内容是字符串
+                        //     $this->send($k,$buffer);
+                        //     continue;
+                        // }
+                        // if (false !== strpos($buffer, 'filename=')) {
+                        //     $len_content = 0;
+                        //     parse_str($buffer,$msg);
+                        //     //$filename = $this->saveFile(substr($buffer, 9));
+                        //     $filename = $msg['filename'];
+                        //     $fileNewPath = $this->saveFile($msg['filename']);
+                        //     $fileNewName = basename($fileNewPath);
+                        //     $filesize = $msg['filesize'];
+                        //     $this->response($k,array('data' => 'ok', 'filename' =>$filename, 'fileNewName' => "$fileNewName"));
+                        // } else if (!empty($fileNewName)) {
+                        //     $this->saveFileContent($fileNewPath, $buffer);
+                        //     $len_content += strlen($buffer);
+                        //     if($len_content >= $filesize){
+                        //         $fileNewName = "";
+                        //     }
+                        //     $this->response($k, array('data' => 'ok', 'percent' =>floor($len_content/$filesize*100), 'recv'=> $len_content,'fileName' => $filename));
+                        // }
                     }
                 }
             }
@@ -226,6 +229,18 @@ class Sock{
         return $ar;
     }
 
+    function sendStr($k, $str)
+    {
+        $str = $this->frame($str);
+        $users=$this->users;
+        //给自己发消息
+        foreach($users as $k1 => $v){
+            if($k1 == $k){
+                socket_write($v['socket'],$str,strlen($str));
+            }
+        }
+
+    }
     //发送文件消息时
     function response($k,$ar){
         //if($ar['real_path']){
