@@ -34,7 +34,7 @@
         $(function() {
             $("#connect").click(function() {
                 //ws = new WebSocket($("#uri").val());
-                ws = new WebSocket("ws://127.0.0.1:4000");
+                ws = new WebSocket("ws://192.168.1.112:4000");
                 //连接成功建立后响应
                 ws.onopen = function() {
                     ws.send('hello world!');
