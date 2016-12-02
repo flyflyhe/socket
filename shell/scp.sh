@@ -1,3 +1,12 @@
 #!/bin/bash
+source /etc/profile
 today=$(date +%Y-%m-%d)
-scp c.org:/tmp/bak_trusted_list12.php /home/fly/bak/12shouxin.php.$today >> /home/fly/trusted_cron.log           
+/usr/bin/scp -P 2208 -v root@112.74.182.208:/tmp/bak_trusted_list12.php /home/fly/bak/12shouxin.php.$today >> /home/fly/bak/scp.log
+
+
+####
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=fly
+HOME=/home/fly
+00 12 * * * sh /home/fly/flywww/socket/shell/scp.sh >> /home/fly/bak/scp.log
