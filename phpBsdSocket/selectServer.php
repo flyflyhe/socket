@@ -24,7 +24,8 @@ class SelectServerSocket extends ServerSocket
     {
         $arrRead = [];
         $arrWrite = $arrExp = null;
-        $arrClient = [$this->pSocket];
+        $key = uniqid();
+        $arrClient[$key] = $this->pSocket;
 
         while(true) {
             $arrRead = $arrClient;
@@ -42,6 +43,7 @@ class SelectServerSocket extends ServerSocket
                     echo 1111;
                     if ($bRes === false) {
                         $nKey = array_search($pSocket, $arrClient, true);
+                        echo $nKey;
                         $this->close($arrClient[$nKey]);
                         unset($arrClient[$nKey]);
                         continue;
