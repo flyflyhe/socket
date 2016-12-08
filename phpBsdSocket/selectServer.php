@@ -35,7 +35,8 @@ class SelectServerSocket extends ServerSocket
             foreach ($arrRead as $pSocket) {
                 if ($pSocket === $this->pSocket) {
                     $this->connect();
-                    $arrClient[] = $this->pClient;
+                    $key=uniqid();
+                    $arrClient[$key] = $this->pClient;
                 } else {
                     $bRes = $this->reply();
                     echo 1111;
