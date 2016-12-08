@@ -56,7 +56,7 @@ class SelectServerSocket extends ServerSocket
                     $key=uniqid();
                     $arrClient[$key] = $this->pClient;
                 } else {
-                    $bRes = $this->reply($cSocket);
+                    $bRes = $this->reply($pSocket);
                     echo 1111;
                     if ($bRes === false) {
                         $nKey = array_search($pSocket, $arrClient, true);
