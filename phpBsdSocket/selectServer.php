@@ -19,6 +19,23 @@ class SelectServerSocket extends ServerSocket
         $strMessage = "Client: ".trim($mxData)."\n";
         $this->write($strMessage);
     }
+    
+    protected function read($cSocket)
+    {
+        if (!is_resource($cSocket)) {
+            return false;
+        }
+        $strMessage = "";
+        $strBuffer = "";
+        while ($strBuffer = socket_read($cSocket, 1024, PHP_BINARY_READ)) {
+            $strMessage .= $strBuffer;
+            #如果本次读取的长度小于1024则跳出
+            if (1024 != mb_strlen($mxMessage)) {
+                break;
+            }
+        }
+        return base64_decode($strMessage);
+    }
 
     public function loop()
     {
