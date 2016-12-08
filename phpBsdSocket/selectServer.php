@@ -17,7 +17,7 @@ class SelectServerSocket extends ServerSocket
         }
         var_dump($mxData);
         $strMessage = "Client: ".trim($mxData)."\n";
-        $this->write($strMessage);
+        $this->write($cSocket, $strMessage);
     }
     
     public function read($cSocket)
@@ -35,6 +35,17 @@ class SelectServerSocket extends ServerSocket
             }
         }
         return base64_decode($strMessage);
+    }
+
+    public function write($cSocket, $msg)
+    {
+        #使用base64_encode编码
+        $msg = base64_encode($msg);
+        $bRes = socket_write($cSocket, $msg, mb_strlen($msg));
+        if (!$bRes) {
+            $this->log();
+        }
+        return $bRes;
     }
 
     public function loop()
