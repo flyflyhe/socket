@@ -126,6 +126,7 @@ class ServerSocket
     {
         $this->strErrorCode = socket_last_error();
         $this->strErrorMsg = socket_strerror($this->strErrorCode);
+        die($this->strErrorMsg);
     }
 
     public function __destruct()

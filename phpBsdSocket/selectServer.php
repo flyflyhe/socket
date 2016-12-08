@@ -8,19 +8,22 @@ class SelectServerSocket extends ServerSocket
         $this->loop();
     }
 
-    protected function reply($cSocket)
+    protected function reply2($cSocket)
     {
+        if (!is_resource($cSocket)) {
+            $this->log();
+        }
         echo 'reply调用'.PHP_EOL;
-        $mxData = $this->read($cSocket);
+        $mxData = $this->read2($cSocket);
         if (!$mxData) {
-            return false;
+            $this->log();
         }
         var_dump($mxData);
         $strMessage = "Client: ".trim($mxData)."\n";
-        $this->write($cSocket, $strMessage);
+        $this->write2($cSocket, $strMessage);
     }
     
-    public function read($cSocket)
+    public function read2($cSocket)
     {
         if (!is_resource($cSocket)) {
             return false;
@@ -37,7 +40,7 @@ class SelectServerSocket extends ServerSocket
         return base64_decode($strMessage);
     }
 
-    public function write($cSocket, $msg)
+    public function write2($cSocket, $msg)
     {
         #使用base64_encode编码
         $msg = base64_encode($msg);
@@ -46,6 +49,15 @@ class SelectServerSocket extends ServerSocket
             $this->log();
         }
         return $bRes;
+    }
+
+    protected function connect()
+    {
+        $res = $this->accept();
+        if (socket_getpeername($this->pClient, $address, $port)) {
+            echo "Client $address : $port is now connected to us. \n";
+        }
+        $this->write2($res, "hello world from server\n");
     }
 
     public function loop()
@@ -67,9 +79,10 @@ class SelectServerSocket extends ServerSocket
                     $key=uniqid();
                     $arrClient[$key] = $this->pClient;
                 } else {
-                    $nKey = array_search($pSocket, $arrClient, true);
-                    $bRes = $this->reply($arrClient[$nKey]);
-                    echo 1111;
+                    if (!is_resource($pSocket)) {
+                        die('not a res');
+                    }
+                    $bRes = $this->reply2($pSocket);
                     if ($bRes === false) {
                         $nKey = array_search($pSocket, $arrClient, true);
                         echo $nKey;
