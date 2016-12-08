@@ -11,12 +11,12 @@ class SelectServerSocket extends ServerSocket
     protected function reply2($cSocket)
     {
         if (!is_resource($cSocket)) {
-            $this->log();
+            return false;
         }
         echo 'reply调用'.PHP_EOL;
         $mxData = $this->read2($cSocket);
         if (!$mxData) {
-            $this->log();
+            return false;
         }
         var_dump($mxData);
         $strMessage = "Client: ".trim($mxData)."\n";
@@ -46,9 +46,14 @@ class SelectServerSocket extends ServerSocket
         $msg = base64_encode($msg);
         $bRes = socket_write($cSocket, $msg, mb_strlen($msg));
         if (!$bRes) {
-            $this->log();
+            return false;
         }
         return $bRes;
+    }
+
+    public function close2($cSocket)
+    {
+        socket_close($cSocket);
     }
 
     protected function connect()
@@ -85,8 +90,7 @@ class SelectServerSocket extends ServerSocket
                     $bRes = $this->reply2($pSocket);
                     if ($bRes === false) {
                         $nKey = array_search($pSocket, $arrClient, true);
-                        echo $nKey;
-                        $this->close($arrClient[$nKey]);
+                        $this->close2($arrClient[$nKey]);
                         unset($arrClient[$nKey]);
                         continue;
                     }
