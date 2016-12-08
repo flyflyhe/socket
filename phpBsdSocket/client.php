@@ -48,11 +48,12 @@ class ClientSocket
                 break;
             }
         }
-        return $strMessage;
+        return base64_decode($strMessage);
     }
 
     public function write($msg)
     {
+        $msg = base64_encode($msg);
         $bRes = socket_write($this->pSocket, $msg, mb_strlen($msg));
         if (!$bRes) {
             $this->log();
@@ -62,6 +63,7 @@ class ClientSocket
 
     public function send($msg)
     {
+        $msg = base64_encode($msg);
         $bRes = socket_send($this->pSocket, $msg, mb_strlen($msg));
         if (!$bRes) {
             $this->log();
@@ -104,9 +106,9 @@ $port = 25003;
 $pClient = new ClientSocket($strHost, $port);
 
 var_dump($pClient->read());
-$strMsg = base64_encode('你是一只狗哈哈哈啊:'.uniqid());
+$strMsg = '你是一只狗哈哈哈啊:'.uniqid();
 var_dump($strMsg);
 $pClient->write($strMsg);
-var_dump(base64_decode($pClient->read()));
+var_dump($pClient->read());
 
 $pClient->close();

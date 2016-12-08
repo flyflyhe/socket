@@ -68,14 +68,14 @@ class ServerSocket
     {
         echo 'reply调用';
         $mxData = $this->read();
-        var_dump(base64_decode($mxData));
+        var_dump($mxData);
         if ($mxData == false) {
             socket_close($this->pClient);
             echo "client disconnected.\n";
             return false;
         } else {
-            $strMessage = "Client: ".trim(base64_decode($mxData))."\n";
-            $this->write(base64_encode($strMessage));
+            $strMessage = "Client: ".trim($mxData)."\n";
+            $this->write($strMessage);
             return true;
         }
     }
@@ -102,11 +102,13 @@ class ServerSocket
         if (!$out && $mxMessage === false) {
             $this->log();
         }
-        return $out;
+        return base64_decode($out);
     }
 
     public function write($msg)
     {
+        #使用base64_encode编码
+        $msg = base64_encode($msg);
         $bRes = socket_write($this->pClient, $msg, mb_strlen($msg));
         if (!$bRes) {
             $this->log();
