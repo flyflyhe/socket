@@ -9,7 +9,7 @@ for ($i = 1; $i <= 5; ++$i) {
     } else {
         while(1) {
             sleep(5);
-            file_put_contents("/tmp/test$i.log", date('Y-m-d H:i:s'), FILE_APPEND);
+            echo "进程".$i."输出";
         }
     }
 }
