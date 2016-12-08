@@ -30,7 +30,7 @@ class SelectServerSocket extends ServerSocket
         while ($strBuffer = socket_read($cSocket, 1024, PHP_BINARY_READ)) {
             $strMessage .= $strBuffer;
             #如果本次读取的长度小于1024则跳出
-            if (1024 != mb_strlen($mxMessage)) {
+            if (1024 != mb_strlen($strBuffer)) {
                 break;
             }
         }
