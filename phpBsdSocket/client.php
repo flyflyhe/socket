@@ -80,7 +80,7 @@ class ClientSocket
             $this->log();
         }
         $strMeg .= $strBuffer;
-        return $strMeg;
+        return base64_decode($strMeg);
     }
 
     private function log()
@@ -111,4 +111,5 @@ var_dump($strMsg);
 $pClient->write($strMsg);
 var_dump($pClient->read());
 
+sleep(10);
 $pClient->close();

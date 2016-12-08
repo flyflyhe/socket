@@ -66,7 +66,7 @@ class ServerSocket
 
     protected function reply()
     {
-        echo 'reply调用';
+        echo 'reply调用'.PHP_EOL;
         $mxData = $this->read();
         var_dump($mxData);
         if ($mxData == false) {
@@ -88,7 +88,7 @@ class ServerSocket
 
     public function read()
     {
-        echo 'read调用';
+        echo 'read调用'.PHP_EOL;
         $out = '';
         while ($mxMessage = socket_read($this->pClient, 1024, PHP_BINARY_READ)) {  #注意 主要是这里 这里用的是默认的 type 这里要读取1024字节 如果客户端没有发送这么多数据就会造成子连接的阻塞 导致程序无法继续向下执行 所以要执行一些判断
 
@@ -135,7 +135,7 @@ class ServerSocket
         }
     }
 }
-$strHost     = "127.0.0.1";
-$nPort       = 25003;
-$pServer = new ServerSocket($strHost, $nPort);
-$pServer->run();
+// $strHost     = "127.0.0.1";
+// $nPort       = 25003;
+// $pServer = new ServerSocket($strHost, $nPort);
+// $pServer->run();
