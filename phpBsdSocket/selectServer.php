@@ -20,7 +20,7 @@ class SelectServerSocket extends ServerSocket
         $this->write($strMessage);
     }
     
-    protected function read($cSocket)
+    public function read($cSocket)
     {
         if (!is_resource($cSocket)) {
             return false;
