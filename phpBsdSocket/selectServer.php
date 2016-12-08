@@ -33,7 +33,7 @@ class SelectServerSocket extends ServerSocket
                 continue;
             }
             foreach ($arrRead as $pSocket) {
-                if ($pSocket == $this->pSocket) {
+                if ($pSocket === $this->pSocket) {
                     $this->connect();
                     $arrClient[] = $this->pClient;
                 } else {
