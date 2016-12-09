@@ -101,15 +101,15 @@ class ClientSocket
     }
 }
 
-$strHost = "127.0.0.1";
-$port = 25003;
-$pClient = new ClientSocket($strHost, $port);
+// $strHost = "127.0.0.1";
+// $port = 25003;
+// $pClient = new ClientSocket($strHost, $port);
 
-var_dump($pClient->read());
-$strMsg = '你是一只狗哈哈哈啊:'.uniqid();
-var_dump($strMsg);
-$pClient->write($strMsg);
-var_dump($pClient->read());
+// var_dump($pClient->read());
+// $strMsg = '你是一只狗哈哈哈啊:'.uniqid();
+// var_dump($strMsg);
+// $pClient->write($strMsg);
+// var_dump($pClient->read());
 
-sleep(10);
-$pClient->close();
+// sleep(10);
+// $pClient->close();

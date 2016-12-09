@@ -1,4 +1,7 @@
 <?php
+/**
+    单连接socke服务
+*/
 class ServerSocket
 {
     protected $strHost = "127.0.0.1";

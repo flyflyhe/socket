@@ -1,6 +1,9 @@
 <?php
 include __DIR__."/server.php";
 #循环监听客户端
+/**
+    循环监听多线程tcp服务端
+*/
 class SelectServerSocket extends ServerSocket
 {
     public function run()
@@ -73,6 +76,7 @@ class SelectServerSocket extends ServerSocket
         $arrClient[$key] = $this->pSocket;
 
         while(true) {
+            echo '当前内存使用量'.memory_get_usage().'字节'.PHP_EOL;
             $arrRead = $arrClient;
             var_dump($arrRead);
             if (socket_select($arrRead, $arrWrite, $arrExp, null) < 1) {
