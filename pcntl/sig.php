@@ -1,18 +1,19 @@
 <?php
 declare(ticks = 1);
- 
-pcntl_signal(SIGCHLD, "signal_handler");
- 
-function signal_handler($signal) {
+
+$childArr = [];
+pcntl_signal(SIGCHLD, function ($signal) use (&$childArr) {
     switch($signal) {
         case SIGCHLD:
-            while (pcntl_waitpid(0, $status) != -1) {
-                $status = pcntl_wexitstatus($status);
-                echo "Child $status completed\n";
-            }
-            exit;
+            // while (pcntl_waitpid(0, $status) != -1) {
+            //     $status = pcntl_wexitstatus($status);
+            //     echo "Child $status completed\n";
+            // }
+            $child = pcntl_wait($status);
+            unset($childArr[$child]);
+            echo "Child $child completed\n";
     }
-}
+});
  
 for ($i = 1; $i <= 5; ++$i) {
     $pid = pcntl_fork();
@@ -21,9 +22,13 @@ for ($i = 1; $i <= 5; ++$i) {
         sleep(1);
         print "In child $i\n";
         exit($i);
+    } else if ($pid > 0) {
+        $childArr[$pid] = 1;
     }
 }
- 
-while(1) {
-    // parent does processing here...
+
+while(count($childArr)) {
+   var_export($childArr);
+   sleep(1);
 }
+exit();
