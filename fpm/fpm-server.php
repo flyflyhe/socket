@@ -2,12 +2,12 @@
 
 $processArr = [];
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-$bool = socket_bind($socket, "127.0.0.1", 10000);
+$bool = socket_bind($socket, "127.0.0.1", 9999);
 if (!$bool) {
     throw new Exception("绑定端口失败");
 }
 
-$i = 5;
+$i = 1;
 //父进程和子进程都会执行下面代码
 while ($i--) {
     $pid = pcntl_fork();
@@ -17,7 +17,7 @@ while ($i--) {
     } else if ($pid) {
          //父进程会得到子进程号，所以这里是父进程执行的逻辑
          #pcntl_wait($status); //等待子进程中断，防止子进程成为僵尸进程.
-         pcntl_signal(SIGCHLD, function ($signal) {
+         pcntl_signal(SIGCHLD, function ($signal) use ($processArr) {
             echo "get signal $signal".PHP_EOL;
             $childId = pcntl_wait($status);
             unset($processArr[$childId]);
@@ -34,11 +34,13 @@ while ($i--) {
             if (socket_getpeername($client, $address, $port)) {
                 echo "当前进程id- ".posix_getpid()." -Client $address : $port is now connected to us. \n";
             }
-            socket_write($client, "hello world from server\n");
+            #socket_write($client, "hello world from server\n");
+            $line = socket_read($client, 1024);
+            echo $line.PHP_EOL;
         }
         exit();
     }
 }
 while(count($processArr)){
-    sleep(1);
+    sleep(10);
 };

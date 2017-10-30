@@ -19,7 +19,7 @@ for ($i = 1; $i <= 5; ++$i) {
     $pid = pcntl_fork();
  
     if (0 == $pid) {
-        sleep(1);
+        sleep(100);
         print "In child $i\n";
         exit($i);
     } else if ($pid > 0) {
