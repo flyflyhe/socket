@@ -36,9 +36,16 @@ if ($needInsertEnd < count($list) - 1) {
 
 echo $needInsertStart, ',', $needInsertEnd,  PHP_EOL;
 
-$sList = array_slice($list, 0, $needInsertStart);
+$sList = (array)array_slice($list, 0, $needInsertStart);
+
+//如果插入位置的值 相等 则分割时不带相等值 防止重复
 //$eList = array_slice($list, $list[$needInsertEnd] > $insertEnd ? $needInsertEnd  : $needInsertEnd + 1);
-$eList = array_slice($list, $list[$needInsertEnd] == $insertEnd ? $needInsertEnd + 1  : $needInsertEnd);
+//$eList = array_slice($list, $list[$needInsertEnd] == $insertEnd ? $needInsertEnd + 1  : $needInsertEnd);
+if ($list[$needInsertEnd] == $insertEnd) {
+    $eList = array_slice($list, $needInsertEnd + 1);
+} else {
+    $eList = array_slice($list, $needInsertEnd);
+}
 
 if (count($sList) % 2 == 1) {
     array_push($sList, $insertStart - 1);
