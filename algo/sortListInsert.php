@@ -9,9 +9,11 @@ if (count($list) % 2 !== 0) {
 $insertStart = (int)$argv[1];
 $insertEnd = (int)$argv[2];
 
+//找到大概插入位置
 $needInsertStart = searchInsert($list, $insertStart);
 $needInsertEnd = searchInsert($list, $insertEnd);
 
+//所在新位置需 小于等于所有右侧数据
 if ($needInsertStart > 0) {
     for ($i = $needInsertStart - 1; $i > 0; $i--){
         if ($list[$i] < $insertStart) {
@@ -21,6 +23,7 @@ if ($needInsertStart > 0) {
     $needInsertStart = $i + 1;
 }
 
+//所在新位置需 大于等于所有左侧数据
 if ($needInsertEnd < count($list) - 1) {
     for ($i = $needInsertEnd + 1; $i < count($list) - 1; $i++){
         if ($list[$i] > $insertEnd) {
@@ -30,25 +33,12 @@ if ($needInsertEnd < count($list) - 1) {
     $needInsertEnd = $i - 1;
 }
 
-if ($needInsertEnd < count($list) - 1) {
-    $next = $needInsertEnd + 1;
-    if ($list[$next] == $insertEnd) {
-        if ($next % 2 == 0) {
-            $needInsertEnd += 1;
-        } else {
-            if ($list[$next+1] == $insertEnd) {
-                $needInsertEnd += 2;
-            } else {
-                $needInsertEnd += 1;
-            }
-        }
-    }
-}
 
 echo $needInsertStart, ',', $needInsertEnd,  PHP_EOL;
 
 $sList = array_slice($list, 0, $needInsertStart);
-$eList = array_slice($list, $needInsertEnd + 1);
+//$eList = array_slice($list, $list[$needInsertEnd] > $insertEnd ? $needInsertEnd  : $needInsertEnd + 1);
+$eList = array_slice($list, $list[$needInsertEnd] == $insertEnd ? $needInsertEnd + 1  : $needInsertEnd);
 
 if (count($sList) % 2 == 1) {
     array_push($sList, $insertStart - 1);
@@ -60,7 +50,7 @@ if (count($eList) % 2 == 1) {
 
 $list = array_values(array_merge($sList, [$insertStart, $insertEnd], $eList));
 
-var_dump($list);
+print_r($list);
 
 function searchInsert(array $nums, int $target):int
 {
