@@ -16,18 +16,21 @@ function searchInsert(array $nums, int $target):int
 
     $l = 0;
     $r = $n - 1;
-    while ($l < $r) {
+    $mid = -1;
+
+    while ($l <= $r) {
         $mid = intval($l + floor(($r - $l) / 2));
         echo 'mid', $mid, PHP_EOL;
-        if ($nums[$mid] === $target) return $mid;
         // 当中间元素严格小于目标元素时，肯定不是解
         if ($nums[$mid] < $target) {
             // 下一轮搜索区间是 [mid+1, right]
             $l = $mid + 1;
+        } elseif ($nums[$mid] > $target) {
+            $r = $mid - 1;
         } else {
-            $r = $mid;
+            return $mid;
         }
     }
 
-    return $l;
+    return $mid;
 }
