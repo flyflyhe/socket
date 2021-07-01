@@ -9,6 +9,16 @@ if (count($list) % 2 !== 0) {
 $insertStart = (int)$argv[1];
 $insertEnd = (int)$argv[2];
 
+if ($insertStart > $list[count($list)-1]) {
+    echo implode(',', array_merge($list, [$insertStart, $insertEnd]));
+    exit(0);
+}
+
+if ($insertEnd < $list[0]) {
+    echo implode(',', array_merge([$insertStart, $insertEnd], $list));
+    exit(0);
+}
+
 //找到大概插入位置
 $needInsertStart = searchInsert($list, $insertStart);
 $needInsertEnd = searchInsert($list, $insertEnd);
