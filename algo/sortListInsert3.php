@@ -1,6 +1,6 @@
 <?php
 
-$list = [1, 3, 4, 8, 9, 19, 21, 21, 22, 22, 23, 28];
+$o = $list = [1, 3, 4, 8, 9, 19, 21, 21, 22, 22, 23, 28];
 
 if (count($list) % 2 !== 0) {
     die('不是偶数数组');
@@ -68,12 +68,12 @@ if (count($eList) % 2 == 1) {
 
 $list = array_values(array_merge($sList, [$insertStart, $insertEnd],$eList));
 
+echo implode(',', $o), PHP_EOL;
 echo implode(',', $list);
 
 function searchInsert(array $nums, int $target):int
 {
     $n = count($nums);
-    echo 'len', $n, PHP_EOL;
     if ($n === 0) return 0;
     if ($target < $nums[0]) return 0;
     if ($target > end($nums)) return $n;
@@ -82,7 +82,6 @@ function searchInsert(array $nums, int $target):int
     $r = $n - 1;
     while ($l < $r) {
         $mid = intval($l + floor(($r - $l) / 2));
-        echo 'mid', $mid, PHP_EOL;
         if ($nums[$mid] === $target) return $mid;
         // 当中间元素严格小于目标元素时，肯定不是解
         if ($nums[$mid] < $target) {
