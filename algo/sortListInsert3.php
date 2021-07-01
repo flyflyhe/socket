@@ -9,13 +9,22 @@ if (count($list) % 2 !== 0) {
 $insertStart = (int)$argv[1];
 $insertEnd = (int)$argv[2];
 
+if ($insertStart > $list[count($list)-1]) {
+    echo implode(',', array_merge($list, [$insertStart, $insertEnd]));
+    exit(0);
+}
+
+if ($insertEnd < $list[0]) {
+    echo implode(',', array_merge([$insertStart, $insertEnd], $list));
+    exit(0);
+}
+
 //找到大概插入位置
 $needInsertStart = searchInsert($list, $insertStart);
-$needInsertEnd = searchInsert($list, $insertEnd);
 
-//所在新位置需 大于所有左侧数据
+//所在新位置需 大于所有左侧
 if ($needInsertStart > 0) {
-    for ($i = $needInsertStart - 1; $i > 0; $i--){
+    for ($i = $needInsertStart; $i > 0; $i--){
         if ($list[$i] < $insertStart) {
             break;
         }
@@ -23,30 +32,32 @@ if ($needInsertStart > 0) {
     $needInsertStart = $i + 1;
 }
 
+//插入左侧数据
+$list = array_merge(array_slice($list, 0, $needInsertStart), [$insertStart], array_slice($list, $needInsertStart));
+
+$needInsertEnd = searchInsert($list, $insertEnd);
+
 //所在新位置需 小于所有右侧数据
 if ($needInsertEnd < count($list) - 1) {
-    for ($i = $needInsertEnd + 1; $i < count($list) - 1; $i++){
+    for ($i = $needInsertEnd; $i < count($list) - 1; $i++){
         if ($list[$i] > $insertEnd) {
+            echo $i, PHP_EOL;
             break;
         }
     }
-    $needInsertEnd = $i - 1;
+    $needInsertEnd = $i;
 }
 
+//插入右侧数据
+$list = array_merge(array_slice($list, 0, $needInsertEnd), [$needInsertEnd], array_slice($list, $needInsertEnd));
 
 echo $needInsertStart, ',', $needInsertEnd,  PHP_EOL;
 
+//删除左侧右侧(包括左右侧)之间的数据
 $sList = (array)array_slice($list, 0, $needInsertStart);
+$eList = array_slice($list, $needInsertEnd + 1);
 
-//如果插入位置的值 相等 则分割时不带相等值 防止重复
-//$eList = array_slice($list, $list[$needInsertEnd] > $insertEnd ? $needInsertEnd  : $needInsertEnd + 1);
-//$eList = array_slice($list, $list[$needInsertEnd] == $insertEnd ? $needInsertEnd + 1  : $needInsertEnd);
-if ($list[$needInsertEnd] == $insertEnd) {
-    $eList = array_slice($list, $needInsertEnd + 1);
-} else {
-    $eList = array_slice($list, $needInsertEnd);
-}
-
+//构建新数组
 if (count($sList) % 2 == 1) {
     array_push($sList, $insertStart - 1);
 }
@@ -55,7 +66,7 @@ if (count($eList) % 2 == 1) {
     $eList = array_merge([$insertEnd + 1], $eList);
 }
 
-$list = array_values(array_merge($sList, [$insertStart, $insertEnd], $eList));
+$list = array_values(array_merge($sList, [$insertStart, $insertEnd],$eList));
 
 echo implode(',', $list);
 
